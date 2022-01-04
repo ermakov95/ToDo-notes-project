@@ -1,0 +1,62 @@
+{
+  "name": "ToDo-notes-project",
+  "version": "0.3",
+  "description": "My fourth project - ToDo",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ermakov95/ToDo-notes-project"
+  },
+  "author": {
+    "name": "Ivan Ermakov",
+    "email": "ermakov.i.1995@gmail.com",
+    "url": "https://ermakov95.github.io/"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "pre": "cross-env NODE_ENV=development webpack serve --progress --config ./config/webpack.dev.js",
+    "dev": "cross-env NODE_ENV=development webpack --config ./config/webpack.dev.js",
+    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js",
+    "analyzer": "webpack-bundle-analyzer --port 4200 build/stats.json"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 3 version"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@nurminen/html-beautify-webpack-plugin": "^1.1.3",
+    "autoprefixer": "^10.3.7",
+    "babel-loader": "^8.2.3",
+    "case-sensitive-paths-webpack-plugin": "^2.4.0",
+    "compression-webpack-plugin": "^9.0.0",
+    "copy-webpack-plugin": "^9.0.1",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.4.0",
+    "css-url-relative-plugin": "^1.1.0",
+    "cssnano": "^5.0.8",
+    "glob-import-loader": "^1.1.4",
+    "html-loader": "^3.0.0",
+    "html-replace-webpack-plugin": "^2.6.0",
+    "html-webpack-plugin": "^5.5.0",
+    "image-webpack-loader": "^8.0.1",
+    "mini-css-extract-plugin": "^2.4.3",
+    "perfectionist": "^2.4.0",
+    "postcss": "^8.3.11",
+    "postcss-loader": "^6.2.0",
+    "postcss-preset-env": "^6.7.0",
+    "pug": "^3.0.2",
+    "pug-plain-loader": "^1.1.0",
+    "sass": "^1.43.3",
+    "sass-loader": "^12.2.0",
+    "sass-resources-loader": "^2.2.4",
+    "terser-webpack-plugin": "^5.2.4",
+    "webpack": "^5.60.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.3.1",
+    "webpack-merge": "^5.8.0"
+  }
+}

@@ -1,0 +1,19 @@
+extends ../layouts/main
+
+block variables
+  - var title = 'ToDo';
+  - var description = 'ToDo';
+
+block content
+  .wrap.main-page
+    .buttons
+      button.new-note Новая заметка
+      button.save-note Сохранить изменения
+      button.cancel-note Отменить редактирование
+      button.delete-note Удалить заметку
+    .notes
+    .edit
+      .edit__info *Добавьте Название и минимум 1 todo
+      input.edit__title(type="text", placeholder="Название заметки*")
+      .edit__todos
+      button.edit__add-todo Добавить новый todo

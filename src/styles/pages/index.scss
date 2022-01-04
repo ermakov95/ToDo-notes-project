@@ -1,0 +1,314 @@
+::-webkit-scrollbar { width: 0;}
+
+.wrap {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+button, a {
+    transition: all 100ms linear 0s;
+    &:hover {
+        opacity: 0.8;
+    }
+    &:active {
+        opacity: 0.6;
+    }
+}
+.buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 50px;
+    margin-bottom: 5px;
+    button {
+        width: 100%;
+        height: 50px;
+        background: none;
+        border: 2px grey solid;
+        border-radius: 10px;
+        font-size: 20px;
+    }
+}
+.main-page {
+    .save-note, .cancel-note, .delete-note, .edit {
+        display: none;
+    }
+}
+.notes {
+    width: 100%;    
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.note {
+    width: 100%;
+    height: 100px;
+    border: 2px grey solid;
+    border-radius: 10px;
+    margin: 5px 0;
+    padding: 5px 10px;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    &__title {
+        font-weight: 700;
+        padding-bottom: 5px;
+    }
+    &__text {
+        overflow: hidden;
+    }
+}
+
+.edit-page {
+    .buttons {
+        height: 160px;
+    }
+    .save-note, .cancel-note, .delete-note, .edit {
+        display: block;
+    }
+    .new-note, .notes {
+        display: none;
+    }
+}
+.edit {
+    width: 100%;
+    height: 100%;
+    min-height: calc(100vh - 185px);
+    border: 2px grey solid;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 15px;
+    &__info {
+        display: none;
+        color: red;
+        font-weight: 700;
+        padding-bottom: 5px;
+    }
+    &__title {
+        width: 100%;
+        font-size: 15px;
+        font-weight: 700;
+    }
+    &__todos {
+        padding-top: 5px;
+    }
+    &__todo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 5px;
+        input:nth-child(1) {
+            height: 20px;
+            width: 20px;
+        }
+        input:nth-child(2) {
+            width: 100%;
+            padding: 0 5px;
+        }
+    }
+    &__add-todo {
+        width: 100%;
+        height: 30px;
+        border-radius: 5px;
+    }
+}
+
+@media (min-width: $XSmallWidth) {
+    .wrap {
+        padding: 2.5vw;
+    }
+    .notes {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .note {
+        width: 46.5vw;
+        height: 46.5vw;
+        margin: 1vw 0;
+        &__title {
+            padding-bottom: 5px;
+        }
+    }
+    .edit {
+        min-height: calc(100vh - 5vw - 165px);
+    }
+}
+@media (min-width: $SmallWidth) {
+    .wrap {
+        padding: 2.25vw;
+    }
+    .buttons {
+        flex-direction: row;
+        margin-bottom: 1vw;
+        height: 70px;
+        button {
+            width: 30.5vw;
+            height: 100%;
+        }
+    }
+    .edit-page .buttons {
+        height: 70px;
+        margin-bottom: 2vw;
+    }
+    .note {
+        width: 30.5vw;
+        height: 30.5vw;
+    }
+    .edit {
+        min-height: calc(100vh - 6.5vw - 70px);
+        padding: 11px;
+        font-size: 16.5px;
+        &__title {
+            font-size: 16.5px;
+        }
+        &__todos {
+            padding-top: 10px;
+        }
+        &__todo {
+            padding-bottom: 10px;
+        }
+        &__add-todo {
+            width: 50%;
+            height: 35px;
+        }
+    }
+}
+@media (min-width: $MediumWidth) {
+    .wrap {
+        padding: 2vw;
+    }
+    .buttons {
+        margin-bottom: .9vw;
+        button {
+            width: 22.65vw;
+        }
+    }
+    .edit-page .buttons {
+        margin-bottom: 1.8vw;
+        button {
+            width: 30.5vw;
+        }
+    }
+    .note {
+        width: 22.65vw;
+        height: 22.65vw;
+        margin: .9vw 0;
+    }
+    .edit {
+        min-height: calc(100vh - 5.8vw - 70px);
+        padding: 12px;
+        font-size: 18px;
+        &__title {
+            font-size: 18px;
+        }
+        &__add-todo {
+            width: 45%;
+            height: 40px;
+        }
+    }
+}
+@media (min-width: $XMediumWidth) {
+    .wrap {
+        padding: 1.75vw;
+    }
+    .buttons {
+        margin-bottom: .8vw;
+        button {
+            width: 18.02vw;
+        }
+    }
+    .edit-page .buttons {
+        margin-bottom: 1.6vw;
+        button {
+            width: 31.1vw;
+        }
+    }
+    .note {
+        width: 18.02vw;
+        height: 18.02vw;
+        margin: .8vw 0;
+    }
+    .edit {
+        min-height: calc(100vh - 5.1vw - 70px);
+        padding: 13px;
+        font-size: 19.5px;
+        &__title {
+            font-size: 19.5px;
+        }
+        &__add-todo {
+            width: 40%;
+            height: 45px;
+        }
+    }
+}
+@media (min-width: $LargeWidth) {
+    .wrap {
+        padding: 1.5vw;
+    }
+    .buttons {
+        margin-bottom: .7vw;
+        button {
+            width: 15vw;
+        }
+    }
+    .edit-page .buttons {
+        margin-bottom: 1.4vw;
+        button {
+            width: 31.4vw;
+        }
+    }
+    .note {
+        width: 15vw;
+        height: 15vw;
+        margin: .7vw 0;
+    }
+    .edit {
+        min-height: calc(100vh - 4.4vw - 70px);
+        padding: 14px;
+        font-size: 21px;
+        &__title {
+            font-size: 21px;
+        }
+        &__add-todo {
+            width: 35%;
+            height: 50px;
+            border-radius: 10px;
+        }
+    }
+}
+@media (min-width: $XLargeWidth) {
+    .wrap {
+        padding: 1.25vw;
+    }
+    .buttons {
+        margin-bottom: .6vw;
+        button {
+            width: 12.9vw;
+        }
+    }
+    .edit-page .buttons {
+        margin-bottom: 1.2vw;
+        button {
+            width: 31.7vw;
+        }
+    }
+    .note {
+        width: 12.9vw;
+        height: 12.9vw;
+        margin: .6vw 0;
+    }
+    .edit {
+        min-height: calc(100vh - 3.7vw - 70px);
+        padding: 15px;
+        font-size: 22.5px;
+        &__title {
+            font-size: 22.5px;
+        }
+        &__add-todo {
+            width: 30%;
+        }
+    }
+}
