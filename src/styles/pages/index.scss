@@ -7,7 +7,7 @@
     padding: 10px;
     font-family: Arial, Helvetica, sans-serif;
 }
-button, a {
+button, a, input {
     transition: all 100ms linear 0s;
     &:hover {
         opacity: 0.75;
@@ -52,12 +52,28 @@ button, a {
     font-size: 15px;
     display: flex;
     flex-direction: column;
+    position: relative;
     &__title {
         font-weight: 700;
         padding-bottom: 5px;
     }
     &__text {
         overflow: hidden;
+    }
+    &__delete {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border-radius: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 25px;
+    }
+    &:hover {
+        opacity: 0.85;
+    }
+    &:active {
+        opacity: 0.7;
     }
 }
 
@@ -90,6 +106,9 @@ button, a {
         width: 100%;
         font-size: 15px;
         font-weight: 700;
+        border: 2px solid #e6e6e6;
+        border-radius: 5px;
+        padding: 5px;
     }
     &__todos {
         padding-top: 5px;
@@ -105,7 +124,13 @@ button, a {
         }
         input:nth-child(2) {
             width: 100%;
-            padding: 0 5px;
+            padding: 5px;
+            margin: 0 5px;
+            border: 2px solid #e6e6e6;
+            border-radius: 5px;
+        }
+        &>input:nth-child(1):checked+input:nth-child(2){
+            font-style: italic;
         }
     }
     &__add-todo {
@@ -136,8 +161,8 @@ button, a {
     &-inner {
         background-color: white;
         border-radius: 10px;
-        max-width: 90%;
-        padding: 20px 10px;
+        max-width: 95%;
+        padding: 20px 20px;
         text-align: center;
         opacity: 0;
         pointer-events: none;
@@ -159,10 +184,29 @@ button, a {
         padding: 15px;
     }
 }
+.it {
+    font-style: italic;
+}
 
-@media (min-width: $XSmallWidth) {
+@media (min-width: $SmallWidth) {
     .wrap {
         padding: 2.5vw;
+    }
+    .buttons {
+        flex-direction: row;
+        margin-bottom: 1vw;
+        height: 70px;
+        button {
+            width: 46.5vw;
+            height: 100%;
+        }
+    }
+    .edit-page .buttons {
+        height: 70px;
+        margin-bottom: 2vw;
+        button {
+            width: 32%;
+        }
     }
     .notes {
         flex-direction: row;
@@ -172,6 +216,7 @@ button, a {
     .note {
         width: 46.5vw;
         height: 46.5vw;
+        font-size: 15.5px;
         margin: 1vw 0;
         &__title {
             padding-bottom: 5px;
@@ -179,41 +224,21 @@ button, a {
     }
     .edit {
         min-height: calc(100vh - 5vw - 165px);
-    }
-}
-@media (min-width: $SmallWidth) {
-    .wrap {
-        padding: 2.25vw;
-    }
-    .buttons {
-        flex-direction: row;
-        margin-bottom: 1vw;
-        height: 70px;
-        button {
-            width: 30.5vw;
-            height: 100%;
-        }
-    }
-    .edit-page .buttons {
-        height: 70px;
-        margin-bottom: 2vw;
-    }
-    .note {
-        width: 30.5vw;
-        height: 30.5vw;
-    }
-    .edit {
-        min-height: calc(100vh - 6.5vw - 70px);
         padding: 11px;
         font-size: 16.5px;
         &__title {
             font-size: 16.5px;
+            padding: 7px;
         }
         &__todos {
             padding-top: 10px;
         }
         &__todo {
             padding-bottom: 10px;
+            input:nth-child(1), button {
+                height: 30px;
+                width: 30px;
+            }
         }
         &__add-todo {
             width: 50%;
@@ -222,6 +247,39 @@ button, a {
     }
 }
 @media (min-width: $MediumWidth) {
+    .wrap {
+        padding: 2.25vw;
+    }
+    .buttons {
+        margin-bottom: 1vw;
+        button {
+            width: 30.5vw;
+        }
+    }
+    .edit-page .buttons {
+        margin-bottom: 2vw;
+    }
+    .note {
+        width: 30.5vw;
+        height: 30.5vw;
+        margin: 1vw 0;
+        font-size: 16px;
+    }
+    .edit {
+        min-height: calc(100vh - 6.5vw - 70px);
+        padding: 12px;
+        font-size: 18px;
+        &__title {
+            font-size: 18px;
+            padding: 9px;
+        }
+        &__add-todo {
+            width: 45%;
+            height: 40px;
+        }
+    }
+}
+@media (min-width: $XMediumWidth) {
     .wrap {
         padding: 2vw;
     }
@@ -233,29 +291,34 @@ button, a {
     }
     .edit-page .buttons {
         margin-bottom: 1.8vw;
-        button {
-            width: 30.5vw;
-        }
     }
     .note {
         width: 22.65vw;
         height: 22.65vw;
         margin: .9vw 0;
+        font-size: 16.5px;
     }
     .edit {
         min-height: calc(100vh - 5.8vw - 70px);
-        padding: 12px;
-        font-size: 18px;
+        padding: 13px;
+        font-size: 19.5px;
         &__title {
-            font-size: 18px;
+            font-size: 19.5px;
+            padding: 11px;
+        }
+        &__todo {
+            input:nth-child(1), button {
+                height: 35px;
+                width: 35px;
+            }
         }
         &__add-todo {
-            width: 45%;
-            height: 40px;
+            width: 40%;
+            height: 45px;
         }
     }
 }
-@media (min-width: $XMediumWidth) {
+@media (min-width: $LargeWidth) {
     .wrap {
         padding: 1.75vw;
     }
@@ -275,21 +338,32 @@ button, a {
         width: 18.02vw;
         height: 18.02vw;
         margin: .8vw 0;
+        font-size: 17px;
     }
     .edit {
         min-height: calc(100vh - 5.1vw - 70px);
-        padding: 13px;
-        font-size: 19.5px;
+        padding: 14px;
+        font-size: 21px;
         &__title {
-            font-size: 19.5px;
+            font-size: 21px;
+            padding: 13px;
+        }
+        &__todos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        &__todo {
+            width: 49%;
         }
         &__add-todo {
-            width: 40%;
-            height: 45px;
+            width: 35%;
+            height: 50px;
+            border-radius: 10px;
         }
     }
 }
-@media (min-width: $LargeWidth) {
+@media (min-width: $XLargeWidth) {
     .wrap {
         padding: 1.5vw;
     }
@@ -309,56 +383,15 @@ button, a {
         width: 15vw;
         height: 15vw;
         margin: .7vw 0;
+        font-size: 17.5px;
     }
     .edit {
         min-height: calc(100vh - 4.4vw - 70px);
-        padding: 14px;
-        font-size: 21px;
-        &__title {
-            font-size: 21px;
-        }
-        &__todos {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        &__todo {
-            width: 49%;
-        }
-        &__add-todo {
-            width: 35%;
-            height: 50px;
-            border-radius: 10px;
-        }
-    }
-}
-@media (min-width: $XLargeWidth) {
-    .wrap {
-        padding: 1.25vw;
-    }
-    .buttons {
-        margin-bottom: .6vw;
-        button {
-            width: 12.9vw;
-        }
-    }
-    .edit-page .buttons {
-        margin-bottom: 1.2vw;
-        button {
-            width: 31.7vw;
-        }
-    }
-    .note {
-        width: 12.9vw;
-        height: 12.9vw;
-        margin: .6vw 0;
-    }
-    .edit {
-        min-height: calc(100vh - 3.7vw - 70px);
         padding: 15px;
         font-size: 22.5px;
         &__title {
             font-size: 22.5px;
+            padding: 15px;
         }
         &__add-todo {
             width: 30%;
