@@ -20,11 +20,11 @@ button, a, input {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 50px;
+    height: 40px;
     margin-bottom: 5px;
     button {
         width: 100%;
-        height: 50px;
+        height: 40px;
         background: none;
         border: 2px grey solid;
         border-radius: 10px;
@@ -44,7 +44,7 @@ button, a, input {
 }
 .note {
     width: 100%;
-    height: 100px;
+    max-height: 37.5vw;
     border: 2px grey solid;
     border-radius: 10px;
     margin: 5px 0;
@@ -68,18 +68,20 @@ button, a, input {
         width: 40px;
         height: 40px;
         font-size: 25px;
+        &:hover {
+            color: red;
+            opacity: 1;
+            background-color: #fff;
+        }
     }
     &:hover {
-        opacity: 0.85;
-    }
-    &:active {
-        opacity: 0.7;
+        background-color: #efefef;
     }
 }
 
 .edit-page {
     .buttons {
-        height: 160px;
+        height: 130px;
     }
     .save-note, .cancel-note, .delete-note, .edit {
         display: block;
@@ -91,7 +93,7 @@ button, a, input {
 .edit {
     width: 100%;
     height: 100%;
-    min-height: calc(100vh - 185px);
+    min-height: calc(100vh - 155px);
     border: 2px grey solid;
     border-radius: 10px;
     padding: 10px;
@@ -100,7 +102,6 @@ button, a, input {
         display: none;
         color: red;
         font-weight: 700;
-        padding-bottom: 5px;
     }
     &__title {
         width: 100%;
@@ -109,9 +110,7 @@ button, a, input {
         border: 2px solid #e6e6e6;
         border-radius: 5px;
         padding: 5px;
-    }
-    &__todos {
-        padding-top: 5px;
+        margin: 5px 0;
     }
     &__todo {
         display: flex;
@@ -133,9 +132,27 @@ button, a, input {
             font-style: italic;
         }
     }
-    &__add-todo {
+    &__buttons {
         width: 100%;
         height: 30px;
+        display: flex;
+        justify-content:space-between;
+        img {
+            max-height: 100%;
+            max-width: 100%;
+        }
+    }
+    &__cancel, &__repeat {
+        width: 18.5%;
+        height: 100%;
+        border-radius: 5px;
+    }
+    &__cancel img {
+        transform: scale(-1, 1)
+    }
+    &__add-todo {
+        width: 60%;
+        height: 100%;
         border-radius: 5px;
     }
 }
@@ -161,11 +178,13 @@ button, a, input {
     &-inner {
         background-color: white;
         border-radius: 10px;
-        max-width: 95%;
-        padding: 20px 20px;
+        width: 320px;
+        max-width: 92%;
+        padding: 30px 20px;
         text-align: center;
         opacity: 0;
         pointer-events: none;
+        position: relative;
         &.active {
             opacity: 1;
             pointer-events: all;
@@ -174,14 +193,22 @@ button, a, input {
     span {
         display: none;
     }
+    &__exit {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-radius: 10px;
+
+    }
     &__buttons {
         padding-top: 20px;
         display: flex;
         justify-content: space-around;
-    }
-    button {
-        width: 40%;
-        padding: 15px;
+        button {
+            width: 40%;
+            padding: 15px;
+            border-radius: 10px;
+        }
     }
 }
 .it {
@@ -215,7 +242,7 @@ button, a, input {
     }
     .note {
         width: 46.5vw;
-        height: 46.5vw;
+        max-height: 46.5vw;
         font-size: 15.5px;
         margin: 1vw 0;
         &__title {
@@ -223,7 +250,7 @@ button, a, input {
         }
     }
     .edit {
-        min-height: calc(100vh - 5vw - 165px);
+        min-height: calc(100vh - 5vw - 80px);
         padding: 11px;
         font-size: 16.5px;
         &__title {
@@ -240,9 +267,11 @@ button, a, input {
                 width: 30px;
             }
         }
-        &__add-todo {
-            width: 50%;
+        &__buttons {
             height: 35px;
+        }
+        &__cancel, &__repeat {
+            width: 19%;
         }
     }
 }
@@ -261,7 +290,7 @@ button, a, input {
     }
     .note {
         width: 30.5vw;
-        height: 30.5vw;
+        max-height: 30.5vw;
         margin: 1vw 0;
         font-size: 16px;
     }
@@ -273,9 +302,9 @@ button, a, input {
             font-size: 18px;
             padding: 9px;
         }
-        &__add-todo {
-            width: 45%;
+        &__buttons {
             height: 40px;
+            width: 66.7%;
         }
     }
 }
@@ -294,7 +323,7 @@ button, a, input {
     }
     .note {
         width: 22.65vw;
-        height: 22.65vw;
+        max-height: 22.65vw;
         margin: .9vw 0;
         font-size: 16.5px;
     }
@@ -312,8 +341,8 @@ button, a, input {
                 width: 35px;
             }
         }
-        &__add-todo {
-            width: 40%;
+        &__buttons {
+            width: 50%;
             height: 45px;
         }
     }
@@ -336,7 +365,7 @@ button, a, input {
     }
     .note {
         width: 18.02vw;
-        height: 18.02vw;
+        max-height: 18.02vw;
         margin: .8vw 0;
         font-size: 17px;
     }
@@ -356,8 +385,8 @@ button, a, input {
         &__todo {
             width: 49%;
         }
-        &__add-todo {
-            width: 35%;
+        &__buttons {
+            width: 41%;
             height: 50px;
             border-radius: 10px;
         }
@@ -381,7 +410,7 @@ button, a, input {
     }
     .note {
         width: 15vw;
-        height: 15vw;
+        max-height: 15vw;
         margin: .7vw 0;
         font-size: 17.5px;
     }
@@ -393,8 +422,8 @@ button, a, input {
             font-size: 22.5px;
             padding: 15px;
         }
-        &__add-todo {
-            width: 30%;
+        &__buttons {
+            width: 32%;
         }
     }
 }

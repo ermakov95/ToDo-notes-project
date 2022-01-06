@@ -43,7 +43,7 @@ const rendering = () => {
         const noteText = document.createElement(`div`)
         noteText.className = 'note__text'
         for (todo of note[2]) {
-            if (todo[0]) {
+            if (todo[0]) { // Если todo выполнен - рисуем италиком
                 const italicSpan = document.createElement(`span`)
                 italicSpan.className = 'it'
                 italicSpan.append(todo[1])
@@ -79,19 +79,23 @@ const allTodo = document.getElementsByClassName('edit__todo') // Живая ко
 const divPopup = document.querySelector('.popup');
 const divPopupInner = document.querySelector('.popup-inner');
 
-let mainMode = 'main' // main / new / old
-let popupMode = 'none' // none / cancel / delete
+let createdEventStorage = []
+let cancelEventStorage = []
+let mainMode = 'main' // main - режим на главной странице / new - режим создания новой заметки / old - режим редактирования старой заметки
+let popupMode = 'none' // none / cancel / delete / режимы поп-апа
 let countTodo = 0 // Количество созданных todo
 let idNote // ID заметки
 let iNote // Место заметки в базе
 
-const editNote = (mode = 'main', title = '', todos = '', count = 0, id = null, i = null ) => { // Функция установки переменных
+const setVars = (mode = 'main', title = '', todos = '', count = 0, id = null, i = null, createdStorage = [], cancelStorage = []) => { // Функция установки переменных
     mainMode = mode
     divEditTitle.value = title
     divEditTodos.innerHTML = todos
     countTodo = count
     idNote = id
     iNote = i
+    createdEventStorage = createdStorage
+    cancelEventStorage = cancelStorage
 }
 
 // Отслеживаем клики и делигируем
@@ -101,7 +105,7 @@ document.addEventListener('click', (event) => {
 
         divWrap.classList.remove('main-page')
         divWrap.classList.add('edit-page')
-        editNote('new')
+        setVars('new')
 
     } else if (event.target.closest('.note') && !event.target.closest('.note__delete')) { // Редактирование старой заметки
 
@@ -141,9 +145,11 @@ document.addEventListener('click', (event) => {
         }
 
         // Передаём данные в DOM
-        editNote('old', oldNote[1], todos, countTodo, idNote, iNote)
+        setVars('old', oldNote[1], todos, countTodo, idNote, iNote)
 
     } else if (event.target.closest('.edit__add-todo')) { // Кнопка Добавить новый todo
+
+        createdEventStorage.push(['add-todo', countTodo])
 
         divEditTodos.insertAdjacentHTML('beforeend', `
         <div id="${countTodo}-todo" class="edit__todo">
@@ -155,6 +161,12 @@ document.addEventListener('click', (event) => {
 
     } else if (event.target.closest('.edit__todo button')) { // Кнопка Удалить todo
 
+        for (let i = 0; i < event.path[2].children.length; i++) {
+            if (event.path[2].children[i] === event.path[1]){
+                createdEventStorage.push(['remove-todo', i, allTodo[event.path[1].id]])
+            }
+        }
+
         allTodo[event.path[1].id].remove()
 
     } else if (event.target.closest('.save-note')) { // Кнопка Сохранить изменения
@@ -163,7 +175,7 @@ document.addEventListener('click', (event) => {
         const todos = []
         for (todo of allTodo) { 
             const inputs = todo.querySelectorAll('input')
-            // Если todo не пустой - добавляем в массив
+            // Если todo не пустой - добавляем в массив todos
             if (inputs[1].value) { 
                 todos.push([inputs[0].checked, inputs[1].value])
             }
@@ -200,8 +212,8 @@ document.addEventListener('click', (event) => {
             divWrap.classList.add('main-page')
             divWrap.classList.remove('edit-page')
             divEditInfo.style.display = 'none'
-            editNote()
-        // Если массив todos пуст или нет названия - выводим строку "*Добавьте название заметки и минимум 1 непустой todo"
+            setVars()
+        // Если массив todos пуст или нет названия - выводим строку "*Добавьте название заметки и/или минимум 1 непустой todo"
         } else { 
             divEditInfo.style.display = 'block'
         }
@@ -224,7 +236,7 @@ document.addEventListener('click', (event) => {
             idNote = +idNote.match(/\d+/)
         }
 
-    } else if (event.target.closest('.popup__no') || event.target === divPopup) { // Кнопка Нет поп-апа или клик на фон
+    } else if (event.target.closest('.popup__no') || event.target.closest('.popup__exit') || event.target === divPopup) { // Кнопка Нет поп-апа или крестик на поп-апе или клик на фон
 
         popupMode = 'none'
         divPopup.classList.remove('active');
@@ -262,6 +274,64 @@ document.addEventListener('click', (event) => {
             divWrap.classList.remove('edit-page')
         }
         divEditInfo.style.display = 'none'
-        editNote()
+        setVars()
+    } else if (event.target.closest('.edit__cancel')) { // Кнопка Отменить действие
+
+        const crLen = createdEventStorage.length
+
+        if (crLen > 0) {
+
+            const i = createdEventStorage[crLen-1][1]
+
+            if (createdEventStorage[crLen-1][0] === 'add-todo') { // Если отменяем добавление todo
+
+                cancelEventStorage.push(['remove-todo', i, allTodo[`${i}-todo`]])
+
+                allTodo[`${i}-todo`].remove()
+                createdEventStorage.pop()
+
+            } else if (createdEventStorage[crLen-1][0] === 'remove-todo') { // Если отменяем удаление todo
+                
+                cancelEventStorage.push(['add-todo', i])
+                
+                if (i === 0) { 
+                    divEditTodos.insertAdjacentElement('afterbegin', createdEventStorage[crLen-1][2])
+                } else if ( i >= allTodo.length) {
+                    divEditTodos.insertAdjacentElement('beforeend', createdEventStorage[crLen-1][2])
+                } else {
+                    allTodo[i - 1].insertAdjacentElement('afterend', createdEventStorage[crLen-1][2])
+                }
+                createdEventStorage.pop()
+            }
+        }
+    } else if (event.target.closest('.edit__repeat')) { // Кнопка Повторить действие
+
+        const canLen = cancelEventStorage.length
+
+        if (canLen > 0) {
+
+            const i = cancelEventStorage[canLen-1][1]
+
+            if (cancelEventStorage[canLen-1][0] === 'add-todo') { // Если отменяем возвращение todo
+
+                createdEventStorage.push(['remove-todo', i, allTodo[`${i}-todo`]])
+
+                allTodo[`${i}-todo`].remove()
+                cancelEventStorage.pop()
+
+            } else if (cancelEventStorage[canLen-1][0] === 'remove-todo') { // Если отменяем удаление todo
+                
+                createdEventStorage.push(['add-todo', i])
+                
+                if (i === 0) { 
+                    divEditTodos.insertAdjacentElement('afterbegin', cancelEventStorage[canLen-1][2])
+                } else if ( i >= allTodo.length) {
+                    divEditTodos.insertAdjacentElement('beforeend', cancelEventStorage[canLen-1][2])
+                } else {
+                    allTodo[i - 1].insertAdjacentElement('afterend', cancelEventStorage[canLen-1][2])
+                }
+                cancelEventStorage.pop()
+            }
+        }
     }
 })

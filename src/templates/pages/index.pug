@@ -13,15 +13,21 @@ block content
       button.delete-note Удалить заметку
     .notes
     .edit
-      .edit__info *Добавьте название заметки и минимум 1 непустой todo
+      .edit__info *Добавьте название заметки и/или минимум 1 непустой todo
       input.edit__title(type="text", placeholder="Название заметки*")
       .edit__todos
-      button.edit__add-todo Добавить новый todo
+      .edit__buttons
+        button.edit__add-todo Добавить новый todo
+        button.edit__cancel
+          img(src="~@/img/repeat.svg", alt="Иконка", loading="lazy")
+        button.edit__repeat
+          img(src="~@/img/repeat.svg", alt="Иконка", loading="lazy")
   .popup
     .popup-inner
       .popup__question Вы уверены, что хотите 
         span отменить редактирование?
         span удалить заметку?
+      button.popup__exit Х
       .popup__buttons 
         button.popup__yes Да
         button.popup__no Нет

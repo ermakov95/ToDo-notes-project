@@ -6,7 +6,7 @@
 		<title>ToDo</title>
 		<meta name="description" content="ToDo">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<link href="./styles/index.13faa0.css" rel="stylesheet">
+		<link href="./styles/index.c42442.css" rel="stylesheet">
 	</head>
 
 	<body>
@@ -19,10 +19,18 @@
 			</div>
 			<div class="notes"></div>
 			<div class="edit">
-				<div class="edit__info">*Добавьте название заметки и минимум 1 непустой todo</div>
+				<div class="edit__info">*Добавьте название заметки и/или минимум 1 непустой todo</div>
 				<input class="edit__title" placeholder="Название заметки*">
 				<div class="edit__todos"></div>
-				<button class="edit__add-todo">Добавить новый todo</button>
+				<div class="edit__buttons">
+					<button class="edit__add-todo">Добавить новый todo</button>
+					<button class="edit__cancel">
+						<img src="./img/repeat.svg" alt="Иконка" loading="lazy">
+					</button>
+					<button class="edit__repeat">
+						<img src="./img/repeat.svg" alt="Иконка" loading="lazy">
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="popup">
@@ -30,14 +38,16 @@
 				<div class="popup__question">Вы уверены, что хотите <span>отменить редактирование?</span>
 					<span>удалить заметку?</span>
 				</div>
+				<button class="popup__exit">Х</button>
 				<div class="popup__buttons">
 					<button class="popup__yes">Да</button>
 					<button class="popup__no">Нет</button>
 				</div>
 			</div>
 		</div>
-		<script src="./js/main.db9558.js"></script>
-		<script src="./js/index.73702e.js"></script>
+		<script src="./js/main.a7cf73.js"></script>
+		<script src="./js/vendors.bf28e5.js"></script>
+		<script src="./js/index.bcd735.js"></script>
 	</body>
 
 </html>
