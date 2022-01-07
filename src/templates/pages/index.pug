@@ -13,15 +13,15 @@ block content
       button.delete-note Удалить заметку
     .notes
     .edit
-      .edit__info *Добавьте название заметки и/или минимум 1 непустой todo
+      .edit__info *Добавьте название заметки и/или непустой todo
       input.edit__title(type="text", placeholder="Название заметки*")
-      .edit__todos
       .edit__buttons
         button.edit__add-todo Добавить новый todo
         button.edit__cancel
           img(src="~@/img/repeat.svg", alt="Иконка", loading="lazy")
         button.edit__repeat
           img(src="~@/img/repeat.svg", alt="Иконка", loading="lazy")
+      .edit__todos
   .popup
     .popup-inner
       .popup__question Вы уверены, что хотите 

@@ -98,10 +98,13 @@ button, a, input {
     border-radius: 10px;
     padding: 10px;
     font-size: 15px;
+    display: flex;
+    flex-direction: column;
     &__info {
         display: none;
         color: red;
         font-weight: 700;
+        margin-bottom: 5px;
     }
     &__title {
         width: 100%;
@@ -110,7 +113,6 @@ button, a, input {
         border: 2px solid #e6e6e6;
         border-radius: 5px;
         padding: 5px;
-        margin: 5px 0;
     }
     &__todo {
         display: flex;
@@ -137,6 +139,7 @@ button, a, input {
         height: 30px;
         display: flex;
         justify-content:space-between;
+        margin: 5px 0;
         img {
             max-height: 100%;
             max-width: 100%;
@@ -253,12 +256,12 @@ button, a, input {
         min-height: calc(100vh - 5vw - 80px);
         padding: 11px;
         font-size: 16.5px;
+        &__info {
+            margin-bottom: 7px;
+        }
         &__title {
             font-size: 16.5px;
             padding: 7px;
-        }
-        &__todos {
-            padding-top: 10px;
         }
         &__todo {
             padding-bottom: 10px;
@@ -269,6 +272,7 @@ button, a, input {
         }
         &__buttons {
             height: 35px;
+            margin: 7px 0;
         }
         &__cancel, &__repeat {
             width: 19%;
@@ -298,13 +302,17 @@ button, a, input {
         min-height: calc(100vh - 6.5vw - 70px);
         padding: 12px;
         font-size: 18px;
+        &__info {
+            margin-bottom: 9px;
+        }
         &__title {
             font-size: 18px;
             padding: 9px;
         }
         &__buttons {
             height: 40px;
-            width: 66.7%;
+            width: 66.4%;
+            margin: 9px 0;
         }
     }
 }
@@ -331,6 +339,9 @@ button, a, input {
         min-height: calc(100vh - 5.8vw - 70px);
         padding: 13px;
         font-size: 19.5px;
+        &__info {
+            margin-bottom: 11px;
+        }
         &__title {
             font-size: 19.5px;
             padding: 11px;
@@ -342,8 +353,8 @@ button, a, input {
             }
         }
         &__buttons {
-            width: 50%;
             height: 45px;
+            margin: 11px 0;
         }
     }
 }
@@ -373,6 +384,9 @@ button, a, input {
         min-height: calc(100vh - 5.1vw - 70px);
         padding: 14px;
         font-size: 21px;
+        &__info {
+            margin-bottom: 13px;
+        }
         &__title {
             font-size: 21px;
             padding: 13px;
@@ -386,9 +400,10 @@ button, a, input {
             width: 49%;
         }
         &__buttons {
-            width: 41%;
+            width: 49%;
             height: 50px;
             border-radius: 10px;
+            margin: 13px 0;
         }
     }
 }
@@ -418,12 +433,15 @@ button, a, input {
         min-height: calc(100vh - 4.4vw - 70px);
         padding: 15px;
         font-size: 22.5px;
+        &__info {
+            margin-bottom: 15px;
+        }
         &__title {
             font-size: 22.5px;
             padding: 15px;
         }
         &__buttons {
-            width: 32%;
+            margin: 15px 0;
         }
     }
 }

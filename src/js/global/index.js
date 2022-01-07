@@ -1,337 +1,416 @@
 // Стартовые заметки
-let dataNotes
-if (localStorage.getItem('todo')) {
-    dataNotes = JSON.parse(localStorage.getItem('todo'))
+import defaultDataNotes from "./defaultDataNotes.js";
+
+let dataNotes;
+if (localStorage.getItem("todo")) {
+	dataNotes = JSON.parse(localStorage.getItem("todo"));
 } else {
-    dataNotes = [
-        [0, 'Название заметки', [[true, 'Выполненный todo италиком'], [false, 'Невыполненный todo'], [true, 'Выполненный todo италиком'], [false, 'Невыполненный todo']]],
-        [1, 'Название заметки', [[false, 'Lorem, ipsum dolor sit amet'], [true, 'Сonsectetur adipisicing elit'], [false, 'Autem veniam quam dolorem']]],
-        [3, 'Заметка с длинным названием', [[true, 'Autem veniam quam dolorem'], [false, 'Lorem, ipsum dolor sit amet'], [true, 'Сonsectetur adipisicing elit']]],
-        [5, 'Заметка с очень длинным названием', [[false, 'Сonsectetur adipisicing elit'], [true, 'Autem veniam quam dolorem'], [false, 'Lorem, ipsum dolor sit amet']]],
-        [6, 'Название <span> заметки </span>', [[false, 'Lorem, ipsum <br> dolor sit amet'], [true, 'Сonsectetur adipisicing elit'], [false, 'Autem veniam quam dolorem']]],
-        [8, 'Заметка с длинным названием', [[true, 'Autem veniam quam dolorem'], [false, 'Lorem, ipsum dolor sit amet'], [true, 'Сonsectetur adipisicing elit']]],
-        [9, 'Заметка с очень длинным названием', [[false, 'Сonsectetur adipisicing elit'], [true, 'Autem veniam quam dolorem'], [false, 'Lorem, ipsum dolor sit amet']]],
-        [12, '<button> Заметка </button>', [[false, 'Lorem, ipsum dolor sit amet'], [true, 'Сonsectetur adipisicing elit'], [false, 'Autem veniam <br> quam dolorem']]],
-        [14, 'Заметка с длинным названием', [[true, 'Autem veniam <br> quam dolorem'], [false, 'Lorem, ipsum dolor sit amet'], [true, 'Сonsectetur adipisicing elit']]],
-        [15, 'Заметка с очень <br> длинным названием', [[false, 'Сonsectetur adipisicing elit'], [true, 'Autem veniam <br> quam dolorem'], [false, 'Lorem, ipsum dolor sit amet']]],
-    ]
+	dataNotes = defaultDataNotes;
 }
 
-// Отрисовываем заметки
-const allNotes = document.getElementsByClassName('note') // Живая коллекция заметок с главной страницы
-const divNotes = document.querySelector('.notes') 
+// Отрисовываем заметки на главной странице
+const allNotes = document.getElementsByClassName("note"); // Живая коллекция заметок с главной страницы
+const divNotes = document.querySelector(".notes");
 
 const rendering = () => {
-    const arrayAllId = []
-    for (element of allNotes) { // Учитываем все ранее отрисованные заметки из DOM
-        arrayAllId.push(element.id)
-    };
+	// Учитываем все ранее отрисованные заметки из DOM
+	const arrayAllId = [];
+	for (const element of allNotes) {
+		arrayAllId.push(element.id);
+	}
 
-    for (note of dataNotes) {
+	for (const note of dataNotes) {
+		// Проверяем что заметка отсутсвует в DOM
+		if (arrayAllId.includes(`${note[0]}-note`)) {
+			continue;
+		}
+		// Рисуем заметку
+		const newNote = document.createElement(`div`);
+		newNote.className = "note";
+		newNote.id = `${note[0]}-note`;
 
-        if (arrayAllId.includes(`${note[0]}-note`) === true) { continue } // Проверяем что заметка отсутсвует в DOM
+		const noteTitle = document.createElement(`div`);
+		noteTitle.className = "note__title";
+		noteTitle.append(note[1]);
 
-        // Рисуем заметку
-        const newNote = document.createElement(`div`)
-        newNote.className = 'note'
-        newNote.id = `${note[0]}-note`
+		const noteText = document.createElement(`div`);
+		noteText.className = "note__text";
+		for (const todo of note[2]) {
+			if (todo[0]) {
+				// Если todo выполнен - рисуем италиком
+				const italicSpan = document.createElement(`span`);
+				italicSpan.className = "it";
+				italicSpan.append(todo[1]);
 
-        const noteTitle = document.createElement(`div`)
-        noteTitle.className = 'note__title'
-        noteTitle.append(note[1])
+				noteText.append(italicSpan);
+				noteText.insertAdjacentHTML("beforeend", "<br>");
+			} else {
+				noteText.append(todo[1]);
+				noteText.insertAdjacentHTML("beforeend", "<br>");
+			}
+		}
 
-        const noteText = document.createElement(`div`)
-        noteText.className = 'note__text'
-        for (todo of note[2]) {
-            if (todo[0]) { // Если todo выполнен - рисуем италиком
-                const italicSpan = document.createElement(`span`)
-                italicSpan.className = 'it'
-                italicSpan.append(todo[1])
+		const noteDelete = document.createElement(`button`);
+		noteDelete.className = "note__delete";
+		noteDelete.append("Х");
 
-                noteText.append(italicSpan)
-                noteText.insertAdjacentHTML('beforeend', '<br>')
-            } else {
-                noteText.append(todo[1])
-                noteText.insertAdjacentHTML('beforeend', '<br>')
-            }
-        }
-        const noteDelete = document.createElement(`button`)
-        noteDelete.className = 'note__delete'
-        noteDelete.append('Х')
+		newNote.append(noteTitle);
+		newNote.append(noteText);
+		newNote.append(noteDelete);
+		divNotes.append(newNote);
+	}
+	localStorage.setItem("todo", JSON.stringify(dataNotes));
+};
+rendering();
 
-        newNote.append(noteTitle)
-        newNote.append(noteText)
-        newNote.append(noteDelete)
-        divNotes.append(newNote)
-    } 
+const divWrap = document.querySelector(".wrap");
+const divEditInfo = document.querySelector(".edit__info");
+const divEditTitle = document.querySelector(".edit__title");
+const divEditTodos = document.querySelector(".edit__todos");
+const allTodo = document.getElementsByClassName("edit__todo"); // Живая коллекция todo со страницы создания или редактирования заметок
+const divPopup = document.querySelector(".popup");
+const divPopupInner = document.querySelector(".popup-inner");
 
-    localStorage.setItem('todo', JSON.stringify(dataNotes))  
-}
-rendering()
+let createdEventStorage = []; // Буфер совершенных событий на странице редактирования: добавление/удаление todo, переключение чекбокса
+let cancelEventStorage = []; // Буфер отменённых событий
+let mainMode = "main"; // main - режим на главной странице / new - режим создания новой заметки / old - режим редактирования старой заметки
+let popupMode = "none"; // none / cancel / delete / режимы поп-апа
+let countTodo = 0; // Количество созданных todo
+let idNote; // ID заметки
+let iNote; // Место заметки в базе
 
-const divWrap = document.querySelector('.wrap')
-const divEdit = document.querySelector('.edit') 
-const divEditInfo = document.querySelector('.edit__info') 
-const divEditTitle = document.querySelector('.edit__title') 
-const divEditTodos = document.querySelector('.edit__todos') 
-const editAddTodo = document.querySelector('.edit__add-todo') 
-const allTodo = document.getElementsByClassName('edit__todo') // Живая коллекция todo со страницы создания или редактирования заметок
-const divPopup = document.querySelector('.popup');
-const divPopupInner = document.querySelector('.popup-inner');
-
-let createdEventStorage = []
-let cancelEventStorage = []
-let mainMode = 'main' // main - режим на главной странице / new - режим создания новой заметки / old - режим редактирования старой заметки
-let popupMode = 'none' // none / cancel / delete / режимы поп-апа
-let countTodo = 0 // Количество созданных todo
-let idNote // ID заметки
-let iNote // Место заметки в базе
-
-const setVars = (mode = 'main', title = '', todos = '', count = 0, id = null, i = null, createdStorage = [], cancelStorage = []) => { // Функция установки переменных
-    mainMode = mode
-    divEditTitle.value = title
-    divEditTodos.innerHTML = todos
-    countTodo = count
-    idNote = id
-    iNote = i
-    createdEventStorage = createdStorage
-    cancelEventStorage = cancelStorage
-}
+// Функция установки переменных
+const setVars = (
+	mode = "main",
+	title = "",
+	todos = "",
+	count = 0,
+	id = null,
+	i = null,
+	createdStorage = [],
+	cancelStorage = []
+) => {
+	mainMode = mode;
+	divEditTitle.value = title;
+	divEditTodos.innerHTML = todos;
+	countTodo = count;
+	idNote = id;
+	iNote = i;
+	createdEventStorage = createdStorage;
+	cancelEventStorage = cancelStorage;
+};
 
 // Отслеживаем клики и делигируем
-document.addEventListener('click', (event) => {
+document.addEventListener("click", (event) => {
+	// Кнопка Новая заметка
+	if (event.target.closest(".new-note")) {
 
-    if (event.target.closest('.new-note')) { // Кнопка Новая заметка
+		divWrap.classList.remove("main-page");
+		divWrap.classList.add("edit-page");
+		setVars("new");
 
-        divWrap.classList.remove('main-page')
-        divWrap.classList.add('edit-page')
-        setVars('new')
+		// Редактирование старой заметки
+	} else if (
+		event.target.closest(".note") &&
+		!event.target.closest(".note__delete")
+	) {
+		divWrap.classList.remove("main-page");
+		divWrap.classList.add("edit-page");
+		// Находим idNote заметки
+		if (event.target.closest(".it") || event.target.closest("br")) {
+			idNote = event.path[2].id;
+		} else if (
+			event.target.closest(".note__title") ||
+			event.target.closest(".note__text")
+		) {
+			idNote = event.path[1].id;
+		} else {
+			idNote = event.path[0].id;
+		}
 
-    } else if (event.target.closest('.note') && !event.target.closest('.note__delete')) { // Редактирование старой заметки
+		idNote = +idNote.match(/\d+/);
 
-        divWrap.classList.remove('main-page')
-        divWrap.classList.add('edit-page')
-        // Находим idNote заметки
-        if (event.target.closest('.it') || event.target.closest('br')) {
-            idNote = event.path[2].id
-        } else if (event.target.closest('.note__title') || event.target.closest('.note__text') ) {
-            idNote = event.path[1].id 
-        } else { 
-            idNote = event.path[0].id 
-        }
-
-        idNote = +idNote.match(/\d+/)
-
-        // Находим заметку в базе и её место там
-        let oldNote
-        iNote = 0
-        for (note of dataNotes) {
-            if (idNote === +note[0]) { 
-                oldNote = note
-                break
-            }
-            iNote++
-        }
-        // Верстаем todos
-        countTodo = 0
-        let todos = ''
-        for (todo of oldNote[2]) {
-            todos += `
+		// Находим заметку в базе и её место там
+		let oldNote;
+		iNote = 0;
+		for (const note of dataNotes) {
+			if (idNote === +note[0]) {
+				oldNote = note;
+				break;
+			}
+			iNote++;
+		}
+		// Верстаем todos
+		countTodo = 0;
+		let todos = "";
+		for (const todo of oldNote[2]) {
+			todos += `
             <div id="${countTodo}-todo" class="edit__todo">
-                <input type="checkbox", ${todo[0] ? 'checked' : ''}>
+                <input type="checkbox", class="edit__check", ${ todo[0] ? "checked" : ""}>
                 <input type="text", placeholder="Название todo ${countTodo++}", value="${todo[1]}">
                 <button>X</button>
+            </div>`;
+		}
+		// Передаём данные в DOM для отрисовки Названия заметки и списка todo
+		setVars("old", oldNote[1], todos, countTodo, idNote, iNote);
+
+		// Кнопка Добавить новый todo
+	} else if (event.target.closest(".edit__add-todo")) {
+
+		createdEventStorage.push(["add-todo", countTodo]);
+
+		divEditTodos.insertAdjacentHTML(
+			"beforeend",
+			`<div id="${countTodo}-todo" class="edit__todo">
+                <input type="checkbox" class="edit__check">
+                <input type="text", placeholder="Название todo ${countTodo++}">
+                <button>X</button>
             </div>`
-        }
+		);
+		// Кнопка Удалить todo
+	} else if (event.target.closest(".edit__todo button")) {
 
-        // Передаём данные в DOM
-        setVars('old', oldNote[1], todos, countTodo, idNote, iNote)
+		createdEventStorage.push([
+			"remove-todo",
+			+event.path[1].id.match(/\d+/),
+			allTodo[event.path[1].id],
+		]);
 
-    } else if (event.target.closest('.edit__add-todo')) { // Кнопка Добавить новый todo
+		allTodo[event.path[1].id].remove();
 
-        createdEventStorage.push(['add-todo', countTodo])
+		// Кнопка Сохранить изменения
+	} else if (event.target.closest(".save-note")) {
 
-        divEditTodos.insertAdjacentHTML('beforeend', `
-        <div id="${countTodo}-todo" class="edit__todo">
-            <input type="checkbox">
-            <input type="text", placeholder="Название todo ${countTodo++}">
-            <button>X</button>
-        </div>`
-        )
+		// Собираем непустые todo в todos
+		const todos = [];
+		for (const todo of allTodo) {
+			const inputs = todo.querySelectorAll("input");
+			if (inputs[1].value) {
+				todos.push([inputs[0].checked, inputs[1].value]);
+			}
+		}
+		// Если массив todos не пустой и есть название заметки:
+		if (divEditTitle.value && todos.length > 0) {
 
-    } else if (event.target.closest('.edit__todo button')) { // Кнопка Удалить todo
+			// При создании новой заметки - добавляем в базу dataNotes
+			if (mainMode === "new") {
 
-        for (let i = 0; i < event.path[2].children.length; i++) {
-            if (event.path[2].children[i] === event.path[1]){
-                createdEventStorage.push(['remove-todo', i, allTodo[event.path[1].id]])
-            }
-        }
+				dataNotes.push([
+					dataNotes[dataNotes.length - 1][0] + 1,
+					divEditTitle.value,
+					todos,
+				]);
+				// При редактировании старой заметки - обновляем в базе dataNotes и переотрисовываем
+			} else if (mainMode === "old") {
 
-        allTodo[event.path[1].id].remove()
+				dataNotes[iNote] = [idNote, divEditTitle.value, todos];
 
-    } else if (event.target.closest('.save-note')) { // Кнопка Сохранить изменения
+				const note = allNotes[`${idNote}-note`];
+				note.firstChild.innerHTML = "";
+				note.firstChild.append(divEditTitle.value);
+				note.childNodes[1].innerHTML = "";
+				todos.forEach((element) => {
+					if (element[0]) {
+						const italicSpan = document.createElement(`span`);
+						italicSpan.className = "it";
+						italicSpan.append(element[1]);
 
-        // Собираем непустые todo в todos
-        const todos = []
-        for (todo of allTodo) { 
-            const inputs = todo.querySelectorAll('input')
-            // Если todo не пустой - добавляем в массив todos
-            if (inputs[1].value) { 
-                todos.push([inputs[0].checked, inputs[1].value])
-            }
-        }
-        // Если массив todos не пустой и есть название заметки:
-        if (divEditTitle.value && todos.length > 0) { 
+						note.childNodes[1].append(italicSpan);
+						note.childNodes[1].insertAdjacentHTML("beforeend", "<br>");
+					} else {
+						note.childNodes[1].append(element[1]);
+						note.childNodes[1].insertAdjacentHTML("beforeend", "<br>");
+					}
+				});
+			}
+			// Отрисовываем
+			rendering();
+			divWrap.classList.add("main-page");
+			divWrap.classList.remove("edit-page");
+			divEditInfo.style.display = "none";
+			setVars();
+			// Если массив todos пуст и/или нет названия - выводим строку "*Добавьте название заметки и/или непустой todo"
+		} else {
+			divEditInfo.style.display = "block";
+		}
+		// Кнопка Отменить редактирование
+	} else if (event.target.closest(".cancel-note")) {
 
-            if (mainMode === 'new') { // При создании новой заметки - просто добавляем в базу dataNotes
-                dataNotes.push([dataNotes[dataNotes.length-1][0]+1, divEditTitle.value, todos])
+		popupMode = "cancel";
+		divPopupInner.querySelectorAll("span")[0].style.display = "block";
+		divPopup.classList.add("active");
+		divPopupInner.classList.add("active");
 
-            } else if (mainMode === 'old') { // При редактировании старой заметки - обновляем в базе dataNotes и переотрисовываем
-                dataNotes[iNote] = [idNote, divEditTitle.value, todos]
+		// Кнопка Удалить заметку или крестик на заметке
+	} else if (
+		event.target.closest(".delete-note") ||
+		event.target.closest(".note__delete")
+	) {
+		popupMode = "delete";
+		divPopupInner.querySelectorAll("span")[1].style.display = "block";
+		divPopup.classList.add("active");
+		divPopupInner.classList.add("active");
+		// Если крестиком на заметке - фиксируем id заметки
+		if (event.target.closest(".note__delete")) {
+			idNote = event.path[1].id;
+			idNote = +idNote.match(/\d+/);
+		}
+		// Кнопка Нет поп-апа или крестик на поп-апе или клик на фон
+	} else if (
+		event.target.closest(".popup__no") ||
+		event.target.closest(".popup__exit") ||
+		event.target === divPopup
+	) {
+		popupMode = "none";
+		divPopup.classList.remove("active");
+		divPopupInner.classList.remove("active");
+		divPopupInner.querySelectorAll("span")[0].style.display = "none";
+		divPopupInner.querySelectorAll("span")[1].style.display = "none";
+		idNote = null;
 
-                const note = allNotes[`${idNote}-note`]
-                note.firstChild.innerHTML = ''
-                note.firstChild.append(divEditTitle.value)
-                note.childNodes[1].innerHTML = ''
-                todos.forEach(element => {
-                    if (element[0]) {
-                        const italicSpan = document.createElement(`span`)
-                        italicSpan.className = 'it'
-                        italicSpan.append(element[1])
-        
-                        note.childNodes[1].append(italicSpan)
-                        note.childNodes[1].insertAdjacentHTML('beforeend', '<br>')
-                    } else {
-                        note.childNodes[1].append(element[1])
-                        note.childNodes[1].insertAdjacentHTML('beforeend', '<br>')
-                    }
-                });
-            }
-            // Отрисовываем 
-            rendering() 
-            divWrap.classList.add('main-page')
-            divWrap.classList.remove('edit-page')
-            divEditInfo.style.display = 'none'
-            setVars()
-        // Если массив todos пуст или нет названия - выводим строку "*Добавьте название заметки и/или минимум 1 непустой todo"
-        } else { 
-            divEditInfo.style.display = 'block'
-        }
+		// Кнопка Да поп-апа
+	} else if (event.target.closest(".popup__yes")) {
 
-    } else if (event.target.closest('.cancel-note')) { // Кнопка Отменить редактирование
+		    // Действия при удалении старой заметки в режиме редактирования
+		if (popupMode === "delete" && mainMode === "old") {
 
-        popupMode = 'cancel'
-        divPopupInner.querySelectorAll('span')[0].style.display='block'
-        divPopup.classList.add('active');
-        divPopupInner.classList.add('active')
+			dataNotes.splice(iNote, 1);
+			allNotes[`${idNote}-note`].remove();
 
-    } else if (event.target.closest('.delete-note') || event.target.closest('.note__delete')) { // Кнопка Удалить заметку или крестик на заметке
+			// Действия при удалении старой заметки крестиком
+		} else if (popupMode === "delete" && mainMode === "main") {
 
-        popupMode = 'delete'
-        divPopupInner.querySelectorAll('span')[1].style.display='block'
-        divPopup.classList.add('active');
-        divPopupInner.classList.add('active')
-        if (event.target.closest('.note__delete')) { // Если крестиком на заметке - фиксируем id заметки
-            idNote = event.path[1].id
-            idNote = +idNote.match(/\d+/)
-        }
+			allNotes[`${idNote}-note`].remove();
+			for (let i = 0; i < dataNotes.length; i++) {
+				if (dataNotes[i][0] === idNote) {
+					dataNotes.splice(i, 1);
+					break;
+				}
+			}
+		}
 
-    } else if (event.target.closest('.popup__no') || event.target.closest('.popup__exit') || event.target === divPopup) { // Кнопка Нет поп-апа или крестик на поп-апе или клик на фон
+		rendering();
+		popupMode = "none";
 
-        popupMode = 'none'
-        divPopup.classList.remove('active');
-        divPopupInner.classList.remove('active')
-        divPopupInner.querySelectorAll('span')[0].style.display='none'
-        divPopupInner.querySelectorAll('span')[1].style.display='none'
-        idNote = null
+		divPopup.classList.remove("active");
+		divPopupInner.classList.remove("active");
+		divPopupInner.querySelectorAll("span")[0].style.display = "none";
+		divPopupInner.querySelectorAll("span")[1].style.display = "none";
 
-    } else if (event.target.closest('.popup__yes')) { // Кнопка Да поп-апа
+		if (mainMode !== "main") {
+			divWrap.classList.add("main-page");
+			divWrap.classList.remove("edit-page");
+		}
+		divEditInfo.style.display = "none";
+		setVars();
 
-        if (popupMode === 'delete' && mainMode === 'old') { // Действия при удалении старой заметки
-            dataNotes.splice(iNote, 1)
-            allNotes[`${idNote}-note`].remove()
+		// Переключение чекбокса у todo
+	} else if (event.target.closest(".edit__check")) {
+		createdEventStorage.push(["check-toggle", allTodo[event.path[1].id]]);
 
-        } else if (popupMode === 'delete' && mainMode === 'main') { // Действия при удалении заметки крестиком
-            allNotes[`${idNote}-note`].remove()
-            for (let i = 0; i < dataNotes.length; i++) {
-                if (dataNotes[i][0] === idNote) {
-                    dataNotes.splice(i, 1)
-                    break
-                }
-            }
-        };
+		// Кнопка Отменить действие
+	} else if (event.target.closest(".edit__cancel")) {
 
-        rendering()
-        popupMode = 'none'
+		const crLen = createdEventStorage.length;
 
-        divPopup.classList.remove('active');
-        divPopupInner.classList.remove('active')
-        divPopupInner.querySelectorAll('span')[0].style.display='none'
-        divPopupInner.querySelectorAll('span')[1].style.display='none'
+		if (crLen > 0) {
 
-        if (mainMode !== 'main') {
-            divWrap.classList.add('main-page')
-            divWrap.classList.remove('edit-page')
-        }
-        divEditInfo.style.display = 'none'
-        setVars()
-    } else if (event.target.closest('.edit__cancel')) { // Кнопка Отменить действие
+			const lastEl = createdEventStorage[crLen - 1];
+			const id = lastEl[1];
 
-        const crLen = createdEventStorage.length
+                // Если отменяем добавление todo
+			if (lastEl[0] === "add-todo" && allTodo[`${id}-todo`]) {
+				
+				cancelEventStorage.push(["remove-todo", id, allTodo[`${id}-todo`]]);
+				allTodo[`${id}-todo`].remove();
+				createdEventStorage.pop();
 
-        if (crLen > 0) {
+                // Если отменяем удаление todo
+			} else if (lastEl[0] === "remove-todo" && lastEl[2]) {
+				
+				cancelEventStorage.push(["add-todo", id]);
 
-            const i = createdEventStorage[crLen-1][1]
+				if (allTodo.length === 0 || id < +allTodo[0].id.match(/\d+/)) {
 
-            if (createdEventStorage[crLen-1][0] === 'add-todo') { // Если отменяем добавление todo
+					divEditTodos.insertAdjacentElement("afterbegin", lastEl[2]);
 
-                cancelEventStorage.push(['remove-todo', i, allTodo[`${i}-todo`]])
+				} else if (id > +allTodo[allTodo.length - 1].id.match(/\d+/)) {
 
-                allTodo[`${i}-todo`].remove()
-                createdEventStorage.pop()
+					divEditTodos.insertAdjacentElement("beforeend", lastEl[2]);
 
-            } else if (createdEventStorage[crLen-1][0] === 'remove-todo') { // Если отменяем удаление todo
+				} else {
+
+					for (let i = 0; i < allTodo.length - 1; i++) {
+						if (
+							id > +allTodo[i].id.match(/\d+/) &&
+							id < +allTodo[i + 1].id.match(/\d+/)
+						) {
+							allTodo[i].insertAdjacentElement("afterend", lastEl[2]);
+						}
+					}
+				}
+				createdEventStorage.pop();
+
+                // Если отменяем переключение чекбокса
+			} else if (lastEl[0] === "check-toggle") {
+
+				lastEl[1].children[0].checked = lastEl[1].children[0].checked
+					? false
+					: true;
+				cancelEventStorage.push(createdEventStorage.pop());
+			}
+		}
+        // Кнопка Повторить действие
+	} else if (event.target.closest(".edit__repeat")) {
+		
+		const canLen = cancelEventStorage.length;
+
+		if (canLen > 0) {
+
+			const lastEl = cancelEventStorage[canLen - 1];
+			const id = lastEl[1];
+
+                // Если повторяем удаление todo
+			if (lastEl[0] === "add-todo" && allTodo[`${id}-todo`]) {
+
+				createdEventStorage.push(["remove-todo", id, allTodo[`${id}-todo`]]);
+				allTodo[`${id}-todo`].remove();
+				cancelEventStorage.pop();
+
+                // Если повторяем добавление todo
+			} else if (lastEl[0] === "remove-todo" && lastEl[2]) {
+				
+				createdEventStorage.push(["add-todo", id]);
+
+				if (allTodo.length === 0 || id < +allTodo[0].id.match(/\d+/)) {
+
+					divEditTodos.insertAdjacentElement("afterbegin", lastEl[2]);
+
+				} else if (id > +allTodo[allTodo.length - 1].id.match(/\d+/)) {
+
+					divEditTodos.insertAdjacentElement("beforeend", lastEl[2]);
+
+				} else {
+
+					for (let i = 0; i < allTodo.length - 1; i++) {
+						if (
+							id > +allTodo[i].id.match(/\d+/) &&
+							id < +allTodo[i + 1].id.match(/\d+/)
+						) {
+							allTodo[i].insertAdjacentElement("afterend", lastEl[2]);
+						}
+					}
+				}
+				cancelEventStorage.pop();
                 
-                cancelEventStorage.push(['add-todo', i])
-                
-                if (i === 0) { 
-                    divEditTodos.insertAdjacentElement('afterbegin', createdEventStorage[crLen-1][2])
-                } else if ( i >= allTodo.length) {
-                    divEditTodos.insertAdjacentElement('beforeend', createdEventStorage[crLen-1][2])
-                } else {
-                    allTodo[i - 1].insertAdjacentElement('afterend', createdEventStorage[crLen-1][2])
-                }
-                createdEventStorage.pop()
-            }
-        }
-    } else if (event.target.closest('.edit__repeat')) { // Кнопка Повторить действие
+                // Если повторяем переключение чекбокса
+			} else if (lastEl[0] === "check-toggle") {
 
-        const canLen = cancelEventStorage.length
-
-        if (canLen > 0) {
-
-            const i = cancelEventStorage[canLen-1][1]
-
-            if (cancelEventStorage[canLen-1][0] === 'add-todo') { // Если отменяем возвращение todo
-
-                createdEventStorage.push(['remove-todo', i, allTodo[`${i}-todo`]])
-
-                allTodo[`${i}-todo`].remove()
-                cancelEventStorage.pop()
-
-            } else if (cancelEventStorage[canLen-1][0] === 'remove-todo') { // Если отменяем удаление todo
-                
-                createdEventStorage.push(['add-todo', i])
-                
-                if (i === 0) { 
-                    divEditTodos.insertAdjacentElement('afterbegin', cancelEventStorage[canLen-1][2])
-                } else if ( i >= allTodo.length) {
-                    divEditTodos.insertAdjacentElement('beforeend', cancelEventStorage[canLen-1][2])
-                } else {
-                    allTodo[i - 1].insertAdjacentElement('afterend', cancelEventStorage[canLen-1][2])
-                }
-                cancelEventStorage.pop()
-            }
-        }
-    }
-})
+				lastEl[1].children[0].checked = lastEl[1].children[0].checked
+					? false
+					: true;
+				createdEventStorage.push(cancelEventStorage.pop());
+			}
+		}
+	}
+});
