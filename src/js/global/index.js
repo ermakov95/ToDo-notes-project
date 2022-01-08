@@ -1,5 +1,8 @@
+'use strict'
+
+
 // Стартовые заметки
-import defaultDataNotes from "./defaultDataNotes.js";
+import defaultDataNotes from "../modules/defaultDataNotes.js";
 
 let dataNotes;
 if (localStorage.getItem("todo")) {
@@ -306,6 +309,7 @@ document.addEventListener("click", (event) => {
 
 		// Переключение чекбокса у todo
 	} else if (event.target.closest(".edit__check")) {
+
 		createdEventStorage.push(["check-toggle", allTodo[event.path[1].id]]);
 
 		// Кнопка Отменить действие
