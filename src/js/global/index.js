@@ -1,15 +1,8 @@
 'use strict'
 
-
 // Стартовые заметки
 import defaultDataNotes from "../modules/defaultDataNotes.js";
-
-let dataNotes;
-if (localStorage.getItem("todo")) {
-	dataNotes = JSON.parse(localStorage.getItem("todo"));
-} else {
-	dataNotes = defaultDataNotes;
-}
+const dataNotes = JSON.parse(localStorage.getItem("todo")) || defaultDataNotes;
 
 // Отрисовываем заметки на главной странице
 const allNotes = document.getElementsByClassName("note"); // Живая коллекция заметок с главной страницы

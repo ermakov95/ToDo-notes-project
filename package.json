@@ -1,11 +1,11 @@
 {
-  "name": "ToDo-notes-project",
+  "name": "ToDoNotes-VanillaJS",
   "version": "1.0.0",
   "description": "My fourth project - ToDo",
   "keywords": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ermakov95/ToDo-notes-project"
+    "url": "https://github.com/ermakov95/ToDoNotes-VanillaJS"
   },
   "author": {
     "name": "Ivan Ermakov",
