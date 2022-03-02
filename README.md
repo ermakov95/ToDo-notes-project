@@ -1,3 +1,1 @@
-# ToDo-notes-project
-My fourth project
-Мой четвёртый проект
+## Vanilla.JS, PUG, SCSS, Webpack
